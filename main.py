@@ -1,18 +1,17 @@
-# FastAPI
+"""main"""
+import time
+
+import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-import time
-import uvicorn
-# Routers
-from vibraproject.routers import searcher
 
+from vibraproject.routers import searcher
 
 # app definition
 app = FastAPI()
 
 # app config
 app.include_router(searcher.router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,13 +20,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
+    """add process time header"""
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
     response.headers["X-Process-Time"] = str(process_time)
     return response
 
-if __name__=="__main__":
-    uvicorn.run(app, host='0.0.0.0', port=8095)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8095)
