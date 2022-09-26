@@ -48,6 +48,8 @@ async def search(
         ]
     elif name:
         df_searcher = df_searcher.loc[df_searcher[1] == name]
+    elif last_name:
+        df_searcher = df_searcher.loc[df_searcher[2] == last_name]
     elif city:
         df_searcher = df_searcher.loc[df_searcher[6] == city]
 
